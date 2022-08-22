@@ -1,5 +1,5 @@
 # EE370_Comm_Engineering
-This REPO. contains some documents related to EE 370 course. 
+This REPO. contains some documents and codes related to EE 370 course. 
 
 Fourier series harmonics: The following figure can be reproduced using the code provided
 
