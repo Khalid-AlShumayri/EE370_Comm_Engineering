@@ -7,58 +7,71 @@ clc
 clear all
 close all
 A = 1;      % Amplitude
-zeta = 5;   % For controlling raise\fall time. zeta >= 2 
+zeta = 2;   % For controlling raise\fall time. zeta >= 2 
+            % zeta is a fraction of the period of the signal
+
 T0 = 2;     % Fundamental period in [Sec]. Fall time equals T0/zeta
-N = 10;     % Number of iterations (<30)
+N = 6;     % Number of iterations (<30)
 durt = 6;   % Duration of the signal in [Sec]
 fs = 1000;  % Sampling frequency
 t = -durt/2:1/fs:durt/2-1/fs;
 C0 = A/zeta; % DC term
+
 %   Equation for calculating the k'th harmonic
 syms g(k)
 g(k) = (zeta/((k^2)*2*pi^2))...
         * ( 2-cos(2*pi*k/zeta)-cos(2*pi*k*((zeta-1)/zeta)) );
 %
 sum = C0;
-for n=1:100
+DC_shift = repmat(C0 ,[1,length(t)]);
+harmonics = [];
+harmonics = [harmonics,DC_shift];
+for n=1:N
     
-    if(n<=N)
         T2 = vpa(g(n)); % for numeric value
-        Ck = T2*cos(2*pi*n*t/T0);   % k'th harmonic 
+        Ck = T2.*cos(2*pi*n*t/T0);   % k'th harmonic 
         sum = sum + Ck;
         figure(1)
-        plot1 = plot(t,sum,'LineWidth',1.2);
+        p1 = plot(t,sum,'LineWidth',1.2);
+        yline(0,'--')
         grid on;
-        plot1.Color = '#11D422';
+        p1.Color = '#11D422';
         title(['Iteration = ', num2str(n)])
         axis([-durt/2 durt/2 -0.2 1.2*A])
+        harmonics = [harmonics;Ck];    % Store the harmonic
         pause(0.4); % Wait for sometime 
         if(n ~= N) 
-            delete(plot1);
-        else
-            y_aprox = sum;
+            delete(p1);
         end
-    else
-        T2 = vpa(g(n)); % for numeric value
-        Ck = T2*cos(2*pi*n*t/T0);   % k'th harmonic 
-        sum = sum + Ck;
-    end
-
-
 end
 
 figure(2)
-plot2 = plot(t,sum,'LineWidth',1.2);
+p2 = plot(t,sum,'LineWidth',1.2);
+yline(0,'--')
 grid on;
-hold on
-plot3 = plot(t,y_aprox,'LineWidth',1.2);
-plot2.Color = '#000000'
-plot3.Color = '#11D422';
+hold on;
+p2.Color = '#11D422';
 title(['Fourier series approximation of triangular wave. N = ', num2str(N)])
-legend('Function','approximation')
+legend('approximation')
 axis([-durt/2 durt/2 -0.2 1.2*A])
+
+figure(3)
+[p,q] = ndgrid(t,1:1:N+1);
+plot3(p,q,harmonics);
+yline(0,'--')
+grid on;
+xlabel('Time [Sec]');
+ylabel('Harmonic number');
+title('Harmonics of the Fourier series of a triangular wave');
+lgnd = [];
+lgnd = ['DC shift  ']
+for(i=1:N)
+    txt = ['harmonic ',num2str(i)];
+    lgnd = [lgnd;txt];
+end
+
+legend(lgnd)
 %% 
-lin_width = 2;
 LableFontsize = 13;
 TitleFontsize = 14;
 position = 2;
