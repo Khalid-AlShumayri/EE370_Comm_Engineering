@@ -7,4 +7,4 @@ Fourier series harmonics: The following figure can be reproduced using the code 
 
 ![image](https://user-images.githubusercontent.com/53300785/186660303-d0952425-5a9d-41f3-900a-9e5bab66a107.png)
 
-![image](https://user-images.githubusercontent.com/53300785/186660384-a8f63579-97e4-4ddb-8b57-22a654b4ab3c.png)
+![Single_Sided_magnitude_spectrum](https://user-images.githubusercontent.com/53300785/186660562-438226c7-df97-4d92-8845-5c902584af4c.png)
